@@ -1,6 +1,9 @@
 import { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import logo from '../assets/images/logo.png' 
+import logo from '../assets/images/logo.png'
+import axios from '../Utils'
+import {store} from '../Store/Persistor' 
 
 
 class Login extends Component{
@@ -10,17 +13,48 @@ class Login extends Component{
 
         this.state = {
             username:'',
-            password:''
+            password:'',
+            err_msg:''        
         }
+    }
+
+    componentDidMount(){
+        this.setState({err_msg:store.getState().msg})
+        this.props.dispatch({type:'SETMSG', payload:''})
     }
 
     inputHandler = (event) => {
         this.setState({[event.target.name]:event.target.value})
-        console.log(this.state)
+        //console.log(this.state)
+    }
+
+    submitHandler = async (event) => {
+        event.preventDefault()
+        
+        if(!this.state.username || this.state.username==='' || !this.state.password || this.state.password==='')
+        {
+            this.setState({err_msg:'email and password should not be empty'})
+            return false
+
+        }
+
+        const result = await axios.post('/users/login',{ email:this.state.username, password:this.state.password });
+
+        console.log(result)
+        if(result.data.code===200){
+            this.props.dispatch({type:'LOGIN', payload:result.data.data})
+            this.props.history.push('/dashboard')
+
+        }else{
+            this.setState({err_msg:result.data.msg})
+        }
+
+        //console.log(result)
+
     }
 
     render(){
-        const { username, password } = this.state
+        const { username, password, err_msg } = this.state
         return(
             <div id="layoutAuthentication_content">
             <main>
@@ -30,7 +64,10 @@ class Login extends Component{
                             <div className="card shadow-lg border-0 rounded-lg mt-5">
                                 <div className="card-header"><h3 className="text-center font-weight-light my-4"><img src={logo} alt='logo' /> </h3></div>
                                 <div className="card-body">
-                                    <form>
+                                    <form onSubmit={this.submitHandler} >
+                                        <div className="text-center text-warning">
+                                            { err_msg? <h5 className="text text-danger">{err_msg}</h5>:''} 
+                                        </div> 
                                         <div className="row mb-3">
                                             <div className="col-md-12">
                                                 <div className="form-floating mb-3 mb-md-0">
@@ -70,4 +107,10 @@ class Login extends Component{
     }
 }
 
-export default Login;
+const mapStateToProps = (state) => ({
+    userInfo:'',
+    token:'',
+    isLoggedIn:false
+})
+
+export default connect(mapStateToProps)(Login);
