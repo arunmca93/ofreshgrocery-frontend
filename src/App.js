@@ -13,6 +13,7 @@ import Login from './Components/Login';
 import Register from './Components/Register';
 import Dashboard from './Components/Dashboard';
 import List from './Components/List';
+import CreateList from './Components/CreateList';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route exact path='/register' component={Register} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} permission='can_view_dashboard'  />
               <PrivateRoute exact path='/list' component={List} permission='can_view_list'  />
+              <PrivateRoute exact path='/createList' component={CreateList} permission='can_create_list'  />
 
             </Switch>
           </Router>

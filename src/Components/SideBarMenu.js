@@ -43,8 +43,8 @@ class SideBarMenu extends Component {
                                         Grocery List
                                     </Link>
 
-                                    <Link className="nav-link" to="/list">
-                                        <div className="sb-nav-link-icon"><i className="fas fa-clipboard-list"></i></div>
+                                    <Link className="nav-link" to="/createList">
+                                        <div className="sb-nav-link-icon"><i className="fas fa-cart-plus"></i></div>
                                         Create List
                                     </Link>
                                     

@@ -1,6 +1,7 @@
 import { Component } from "react";
 import Header from "./Header";
 import axios from '../Utils'
+import { Link } from "react-router-dom";
 
 export default class List extends Component{
 
@@ -15,7 +16,7 @@ export default class List extends Component{
     async componentDidMount(){
 
         const result = await axios.get('/orders')
-        console.log(result)
+        //console.log(result)
         this.setState({orders:result.data.data})
         
 
@@ -28,7 +29,14 @@ export default class List extends Component{
                 
                         <main>
                             <div className="container-fluid px-4">
-                                <h1 className="mt-4 text-start">Grocery List</h1>
+                                <div className="row">
+                                    <div className="col-md-8">
+                                        <h1 className="mt-4 text-start">Grocery List</h1>
+                                    </div>
+                                    <div className="col-md-4 pt-5 text-end ">
+                                        <Link to='/createList' ><button className='btn btn-primary'> <i className="fas fa-plus"></i> Create</button></Link>
+                                    </div>
+                                </div>
                                 <div className="content">
                                 <div className="container-fluid">
                                     {
@@ -38,7 +46,7 @@ export default class List extends Component{
                                                 <div key={index} className="row mt-3">
                                                     <div className="card text-start">
                                                         <div className="card-header bg-success text-white mt-2">
-                                                        <h4><i className="fas fa-clipboard-list"></i> {order.name} - List {index+1}</h4>
+                                                        <h4 className="mt-2"><i className="fas fa-clipboard-list"></i> {order.name} - List {index+1}</h4>
                                                         </div>
                                                         <div className="card-body">
                                                             <div className='row'>

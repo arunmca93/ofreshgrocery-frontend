@@ -18,7 +18,7 @@ class TopBar extends Component {
         return(
             <nav className="sb-topnav navbar navbar-expand navbar-dark bg-dark">
                     
-                    <a className="navbar-brand ps-3" href="#!"><img alt="logo" src={logo} width="180px" height="45px" /> </a>
+                    <a className="navbar-brand ps-3 text-start" href="#!"><img className="text-start" alt="logo" src={logo} width="205px" height="45px" /> </a>
                     
                     <button className="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i className="fas fa-bars"></i></button>
                     

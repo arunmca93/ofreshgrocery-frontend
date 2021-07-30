@@ -18,7 +18,7 @@ function PrivateRoute ({component:Component, ...rest}){
 
         const permissions = store.getState().userInfo.permission
 
-        console.log(permissions.indexOf(rest.permission))
+        //console.log(permissions.indexOf(rest.permission))
         if(permissions.indexOf(rest.permission)<0){
             store.dispatch({type:'SETMSG', payload:'Permission denied!'}); 
 

@@ -40,7 +40,7 @@ class Login extends Component{
 
         const result = await axios.post('/users/login',{ email:this.state.username, password:this.state.password });
 
-        console.log(result)
+        //console.log(result)
         if(result.data.code===200){
             this.props.dispatch({type:'LOGIN', payload:result.data.data})
             this.props.history.push('/dashboard')
