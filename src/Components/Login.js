@@ -18,9 +18,16 @@ class Login extends Component{
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         this.setState({err_msg:store.getState().msg})
         this.props.dispatch({type:'SETMSG', payload:''})
+        const result = await axios.get('/'); 
+        
+        console.log(undefined)
+        if(result===undefined)
+            this.setState({err_msg:'API Services are not available'})
+
+
     }
 
     inputHandler = (event) => {

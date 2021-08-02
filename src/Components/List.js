@@ -53,10 +53,10 @@ export default class List extends Component{
                                                                 <div className='col-md-4'><strong>Name:</strong>  {order.name}</div>
                                                                 <div className='col-md-4'><strong>Description:</strong>  {order.description}</div>
                                                                 <div className='col-md-4'>
-                                                                <a href="#" className="btn btn-primary"> <i className="fas fa-eye"></i> View</a> &nbsp;
-                                                                <a href="#" className="btn btn-info"> <i className="fas fa-pen"></i> Edit</a> &nbsp;
-                                                                <a href="#" className="btn btn-danger"> <i className="fas fa-trash"></i> Delete</a> &nbsp;
-                                                                <a href="#" className="btn btn-secondary"> <i className="fas fa-print"></i> Print</a> &nbsp;
+                                                                <button className="btn btn-primary"> <i className="fas fa-eye"></i> View</button> &nbsp;
+                                                                <button className="btn btn-info"> <i className="fas fa-pen"></i> Edit</button> &nbsp;
+                                                                <button className="btn btn-danger"> <i className="fas fa-trash"></i> Delete</button> &nbsp;
+                                                                <button className="btn btn-secondary"> <i className="fas fa-print"></i> Print</button> &nbsp;
 
                                                                 </div>
                                                             </div>
