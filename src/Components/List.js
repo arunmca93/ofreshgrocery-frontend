@@ -2,28 +2,43 @@ import { Component } from "react";
 import Header from "./Header";
 import axios from '../Utils'
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { store } from '../Store/Persistor'
 
-export default class List extends Component{
+
+class List extends Component{
 
     constructor(){
         super()
 
         this.state = {
-            orders:[]
+            orders:[],
+            msg:''
         }
     }
 
     async componentDidMount(){
 
         const result = await axios.get('/orders')
-        //console.log(result)
-        this.setState({orders:result.data.data})
+        this.setState({orders:result.data.data, msg:store.getState().msg})
+        this.props.dispatch({type:'SETMSG', payload:''})
         
 
     }
 
+    closeAlert = ()=>{
+        this.setState({ msg:'' })
+    }
+
+    deleteList = async (listId)=>{
+
+        alert(listId)
+        await axios.delete(`/orders/${listId}`)
+        const result = await axios.get('/orders')
+        this.setState({orders:result.data.data})
+    }
     render(){
-        const { orders } = this.state
+        const { orders, msg } = this.state
         return(
             <Header>
                 
@@ -37,6 +52,18 @@ export default class List extends Component{
                                         <Link to='/createList' ><button className='btn btn-primary'> <i className="fas fa-plus"></i> Create</button></Link>
                                     </div>
                                 </div>
+                                { (msg!=='' && msg!==undefined) ?
+                                <div className="row">
+                                    <div className="col-12 mt-2">
+                                        <div className="alert alert-warning alert-dismissible fade show" role="alert">
+                                            <strong>{msg}</strong> &nbsp;
+                                            <button type="button" onClick={()=>{ this.closeAlert() }} className="btn btn-sm btn-danger" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>:''
+                                }
                                 <div className="content">
                                 <div className="container-fluid">
                                     {
@@ -46,7 +73,7 @@ export default class List extends Component{
                                                 <div key={index} className="row mt-3">
                                                     <div className="card text-start">
                                                         <div className="card-header bg-success text-white mt-2">
-                                                        <h4 className="mt-2"><i className="fas fa-clipboard-list"></i> {order.name} - List {index+1}</h4>
+                                                        <h4 className="mt-2"><i className="fas fa-clipboard-list"></i> {order.name} </h4>
                                                         </div>
                                                         <div className="card-body">
                                                             <div className='row'>
@@ -55,7 +82,7 @@ export default class List extends Component{
                                                                 <div className='col-md-4'>
                                                                 <button className="btn btn-primary"> <i className="fas fa-eye"></i> View</button> &nbsp;
                                                                 <button className="btn btn-info"> <i className="fas fa-pen"></i> Edit</button> &nbsp;
-                                                                <button className="btn btn-danger"> <i className="fas fa-trash"></i> Delete</button> &nbsp;
+                                                                <button className="btn btn-danger" onClick={()=>{ this.deleteList(order.id)}}> <i className="fas fa-trash"></i> Delete</button> &nbsp;
                                                                 <button className="btn btn-secondary"> <i className="fas fa-print"></i> Print</button> &nbsp;
 
                                                                 </div>
@@ -97,3 +124,9 @@ export default class List extends Component{
         )
     }
 } 
+
+const mapStateToProps = (state) => ({
+    msg:''
+})
+
+export default connect(mapStateToProps)(List)

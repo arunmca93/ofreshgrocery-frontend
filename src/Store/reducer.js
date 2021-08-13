@@ -14,17 +14,17 @@ const reducer = (state=initialState, action) => {
 
         case "LOGIN":{
 
-            return { userInfo: action.payload, token: action.payload.token, isLoggedIn:true }
+            return { ...state, userInfo: action.payload, token: action.payload.token, isLoggedIn:true }
         }
 
         case "SETMSG":{
 
-            return { msg: action.payload }
+            return { ...state, msg: action.payload }
         }
 
         case "LOGOUT":{
             storage.removeItem('ofreshgrocery');
-            return { ...initialState }
+            return { ...state }
         }
 
         

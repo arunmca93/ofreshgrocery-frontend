@@ -1,8 +1,9 @@
 import { Component } from "react";
 import Header from "./Header";
 import axios from '../Utils'
+import { connect } from 'react-redux'
 
-export default class CreateList extends Component{
+class CreateList extends Component{
 
     constructor(){
         super()
@@ -16,10 +17,10 @@ export default class CreateList extends Component{
             name:'',
             description:'',
             isNameSet:true,
-            qtyError:false
+            qtyError:false,
+            msg:''
         }
     }
-
 
     changeHandler = (event, index) => {
         
@@ -129,16 +130,19 @@ export default class CreateList extends Component{
             if(val.quantity===''){
                 this.setState({qtyError:true})
                 val.qty_err_msg = 'Should not be empty'
+                hasError=true;
             }
             else if(isNaN(val.quantity)){
                 this.setState({qtyError:true})
                 hasError=true;
                 arr[index].qty_err_msg = 'Invalid number format'
+                hasError=true;
             }
             else if(val.quantity===0){
                 this.setState({qtyError:true})
                 hasError=true;
                 arr[index].qty_err_msg = 'Should be greater than 0'
+                hasError=true;
             }
             else{
 
@@ -150,21 +154,50 @@ export default class CreateList extends Component{
 
                 arr[index].qty_err_msg = ''
                 this.setState({qtyError:false})
+                hasError=false;
+
 
 
             }
             
         })
 
-        this.setState({list:tmp_list})        
+        this.setState({list:tmp_list},async ()=>{
+
+            if(hasError)
+                console.log('Has error')
+            else{
+                let payload = {
+                    name:this.state.name,
+                    description:this.state.description,
+                    user_id:1,
+                    shop_id:1,
+                    address_id:1,
+                    items:this.state.list                  
+                  }
+                console.log(payload)
+
+                let result = await axios.post('/orders/create', payload)
+
+                if(result.data.code===200){
+                    this.props.dispatch({type:'SETMSG',payload:'Listed created successfully!'})
+                    this.props.history.push('/list')
+                }
+                console.log(result)
+
+            }
+                
+        
+        })  
 
 
     }
 
     removeItem = (item)=>{
 
-        console.log(this.state.list.splice(this.state.list.indexOf(item)))
-          this.setState({list: this.state.list.splice(this.state.list.indexOf(item),1)})
+        let temp_list = this.state.list
+        temp_list.splice(temp_list.indexOf(item),1)
+        this.setState({list: temp_list})
     }
 
     inputHandler = (event) => {
@@ -300,3 +333,11 @@ export default class CreateList extends Component{
         )
     }
 } 
+
+const mapStateToProps = (state) =>({
+    
+    msg:''
+})
+
+
+export default connect(mapStateToProps)(CreateList)
